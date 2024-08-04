@@ -1,0 +1,50 @@
+body {
+    background-color: #1e1e1e;
+    color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 100px;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.title {
+    font-size: 20px;
+    color: white;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.links {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+    margin-left: 20px;
+}
+
+.toplink {
+    margin: 0 10px;
+    color: white;
+    text-decoration: none;
+    color: gray;
+}
+
+.search-download {
+    display: flex;
+    align-items: center;
+}
+
+input[type="text"] {
+    padding: 5px;
+    margin-right: 10px;
+}
