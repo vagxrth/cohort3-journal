@@ -1,0 +1,37 @@
+.links {
+    color: #666666; 
+    font-size: .9rem; 
+    padding: 25px; 
+    font-weight: 400; 
+    text-decoration: none; 
+    cursor: pointer;
+    top: 20px;
+    font-family: "Inter", serif;
+    line-height: 1.7;
+    font: 14.4px;
+    font-weight: 350;
+}
+
+.links:hover {
+    color: #387ed1;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    font-family: "Inter", serif;
+    line-height: 1.7;
+}
+
+h5 {
+    font-family: "Inter", serif;
+    line-height: 1.7;
+}
