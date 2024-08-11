@@ -4,13 +4,8 @@ function timeout() {
 
 const timeoutPromise = (time) => {
     return new Promise((resolve) => {
-        setTimeout(() => {
-            timeout();
-            resolve();
-        }, time);
+        setTimeout(resolve, time);
     });
 }
 
-timeoutPromise(5000).then(() => {
-    console.log("Finished");
-})
+timeoutPromise(3000).then(timeout)
