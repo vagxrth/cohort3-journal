@@ -4,5 +4,5 @@
 # fetch Output
 <img width="1197" alt="fetch" src="https://github.com/user-attachments/assets/11d4eb21-12bb-46b5-8b51-ee2dfe830104">
 
-# readFile Output
+# fs.readFile Output
 <img width="1197" alt="read" src="https://github.com/user-attachments/assets/2c72c44f-3114-4f8a-8f3f-18c0cd884cf0">
