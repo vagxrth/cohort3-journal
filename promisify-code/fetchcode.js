@@ -1,22 +1,16 @@
 const fetchPromise = (url) => {
     return new Promise ((resolve, reject) => {
-        fetch(url).then((response) => {
-            if (response.ok) {
-                resolve();
-                console.log("Fetching URL");
-                
-            }
-            else {
-                reject();
-                console.log("Error fetching file");
-            }
-        }). catch((err) => {
-            console.log("Wrong URL");
-        });
+        if (fetch(url).ok) {
+            console.log("Fetching URL")
+            resolve();
+        }
+        reject();
         
     })
 }
 
-fetchPromise("https://www.vagarth.in/").then(() => {
+fetchPromise("file.txt").then(() => {
     console.log("URL Fetched successfully");
-});
+}).catch(() => {
+    console.log("Fuck this error")
+}) ;
