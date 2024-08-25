@@ -2,53 +2,132 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" href="assets/logo.svg">
-  <title>TODOLIST 100xDevs</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="assets/logo.svg">
+    <title>TODOLIST 100xDevs</title>
 </head>
 
 <body>
-  <main>
-    <div class="box" id="heading">
-      <h1>
-        To-Do Your 100x
-      </h1>
-    </div>
-    <div class="box">
-      <!-- Repeated items list -->
-      <div class="item">
-        <form>
-          <input type="checkbox" onchange="this.form.submit()" name="deleteItemId" value="1">
-        </form>
+    <main>
+        <div class="box" id="heading">
+            <h1>Give Your 100x</h1>
+        </div>
+        <div class="box">
+            <div id="todo">
+                <div class="item">
+                    <p style="font-weight: bold; margin-left: 120px;">BE YOUR 100x</p>
+                </div>
+            </div>
 
-        <p id="title1">Sample Item 1</p>
+            <!-- add-button -->
+            <form class="item" onsubmit="event.preventDefault(); addTodo();">
+                <input id="in" type="text" name="newItem" placeholder="New Item" autocomplete="off" autofocus="true" />
+                <button class="add" type="submit" name="list">+</button>
+            </form>
+        </div>
+    </main>
 
-        <form class="edit">
-          <input type="hidden" name="updatedItemId" value="1">
-          <input id="input1" type="text" name="updatedItemTitle" value="Sample Item 1" autocomplete="off" autofocus="true" hidden="true" />
-          <button id="done1" class="edit" type="submit" hidden><img class="icon" src="assets/check-solid.svg" alt="tick image"></button>
-        </form>
-        <button id="edit1" class="edit" onclick="handler('1')"><img class="icon" src="assets/pencil-solid.svg" alt="pencil image"></button>
-      </div>
-            
-      <form class="item">
-        <input type="text" name="newItem" placeholder="New Item" autocomplete="off" autofocus="true" />
-        <button class="add" type="submit" name="list" value="Sample List Title">+</button>
-      </form>
-    </div>
-  </main>
+    <script>
+        let todos = [];
 
-  <script>
-    function handler(id) {
-      document.getElementById("title" + id).setAttribute("hidden", true)
-      document.getElementById("edit" + id).setAttribute("hidden", true)
-      document.getElementById("done" + id).removeAttribute("hidden")
-      document.getElementById("input" + id).removeAttribute("hidden")
-    }
-  </script>
+        function addTodo() {
+            const inputEl = document.querySelector('#in');
+            const value = inputEl.value;
+
+            if (value.trim() === '') {
+                return;
+            }
+
+            todos.push({
+                title: value,
+                checked: false,
+                isEditing: false
+            });
+
+            inputEl.value = '';
+            render();
+        }
+
+        function editTodo(index) {
+            todos[index].isEditing = true; 
+            render();
+        }
+
+        function saveTodoTitle(index) {
+            const newTitle = document.getElementById('input' + index).value; 
+            todos[index].title = newTitle;
+            todos[index].isEditing = false;
+            render(); 
+        }
+
+        function handleCheckbox(checkbox, index) {
+            todos[index].checked = checkbox.checked; 
+            render();
+        }
+
+        function render() {
+            const todoContainer = document.getElementById('todo');
+            todoContainer.innerHTML = '';
+
+            todos.forEach((item, index) => {
+                const divEl1 = document.createElement('div');
+                divEl1.setAttribute('class', 'item-container');
+
+                // Checkbox
+                const inputEl1 = document.createElement('input');
+                inputEl1.setAttribute('type', 'checkbox');
+                inputEl1.checked = item.checked;
+                inputEl1.setAttribute('onchange', `handleCheckbox(this, ${index})`);
+                divEl1.appendChild(inputEl1);
+
+                // Content and Buttons container
+                const contentDiv = document.createElement('div');
+                contentDiv.setAttribute('class', 'content-buttons-container');
+
+                if (item.isEditing) {
+                    const textInput = document.createElement('input');
+                    textInput.id = 'input' + index;
+                    textInput.type = 'text';
+                    textInput.value = item.title;
+                    textInput.autocomplete = 'off';
+                    contentDiv.appendChild(textInput);
+
+                    // Save button
+                    const saveButton = document.createElement('button');
+                    saveButton.setAttribute('onclick', `saveTodoTitle(${index})`);
+
+                    const submitIcon = document.createElement('img');
+                    submitIcon.src = 'assets/check-solid.svg'; 
+                    submitIcon.alt = 'Submit';
+                    submitIcon.className = 'icon';
+                    saveButton.appendChild(submitIcon);
+                    contentDiv.appendChild(saveButton);
+                } else {
+                    const para1 = document.createElement('p');
+                    para1.setAttribute('id', 'title' + index);
+                    para1.style.textDecoration = item.checked ? 'line-through' : 'none';
+                    para1.innerHTML = item.title;
+                    contentDiv.appendChild(para1);
+
+                    // Edit button
+                    const editButton = document.createElement('button');
+                    editButton.setAttribute('onclick', `editTodo(${index})`);
+
+                    const editIcon = document.createElement('img');
+                    editIcon.src = 'assets/pencil-solid.svg'; 
+                    editIcon.alt = 'Edit';
+                    editIcon.className = 'icon';
+                    editButton.appendChild(editIcon);
+                    contentDiv.appendChild(editButton);
+                }
+
+                divEl1.appendChild(contentDiv);
+                todoContainer.appendChild(divEl1);
+            });
+        }
+    </script>
 </body>
 
 </html>

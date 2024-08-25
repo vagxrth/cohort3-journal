@@ -73,18 +73,7 @@ html {
     font-size: 30px;
     border-width: 0;
   }
-  
-  button.edit {
-    margin-left: 0px;
-    margin-right: 20px;
-    border: none;
-    background: none;
-  }
-  
-  .icon {
-    height: 20px;
-  }
-  
+
   input[type="text"] {
     text-align: left;
     height: 60px;
@@ -112,3 +101,35 @@ html {
     text-align: center;
   }
   
+  .item-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.content-buttons-container {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: 20px;
+    overflow: hidden;
+}
+
+.content-buttons-container input[type="text"] {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+}
+
+.add {
+    margin-left: 10px;
+}
+
+input[type="checkbox"] {
+    margin-left: 15px;
+}
