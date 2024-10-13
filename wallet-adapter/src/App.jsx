@@ -10,6 +10,7 @@ import '@solana/wallet-adapter-react-ui/styles.css';
 import Airdrop from './Airdrop';
 import { useMemo } from 'react';
 import Balance from './Balance';
+import SignMessage from './SignMessage';
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
           </div>
           <Airdrop />
           <Balance />
+          <SignMessage />
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
