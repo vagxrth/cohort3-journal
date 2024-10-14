@@ -11,6 +11,7 @@ import Airdrop from './Airdrop';
 import { useMemo } from 'react';
 import Balance from './Balance';
 import SignMessage from './SignMessage';
+import Transact from './Transact';
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
           <Airdrop />
           <Balance />
           <SignMessage />
+          <Transact />
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
