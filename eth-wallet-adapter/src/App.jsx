@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import './App.css'
-import { createConfig, http, useConnect, WagmiProvider } from 'wagmi'
+import { createConfig, http, useAccount, useBalance, useConnect, useDisconnect, WagmiProvider } from 'wagmi'
 import { mainnet } from 'wagmi/chains'
 import { injected, metaMask, safe } from 'wagmi/connectors'
 
@@ -25,11 +25,33 @@ function App() {
 
     return (
       connectors.map((connector) => (
-        <button key={connector.id} onClick={() => connect({ connector })}>
+        <button key={connector.uid} onClick={() => connect({ connector })}>
           {connector.name}
           {connector.error && <div>(error: {connector.error.message})</div>}
         </button>
       ))
+    )
+  }
+
+  const Balance = () => {
+    const { address } = useAccount();
+    const { disconnect } = useDisconnect();
+
+    const balance = useBalance({
+      address
+    })
+
+    return (
+      <>
+        <div>
+        { address && 
+          <div>Address: {address} <br />
+          Balance: { balance?.data?.formatted }</div>
+        }
+        <button onClick={() => disconnect()}>Disconnect</button>
+      </div>
+      </>
+      
     )
   }
 
@@ -38,6 +60,7 @@ function App() {
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
           <WalletConnector />
+          <Balance />
         </QueryClientProvider>
       </WagmiProvider>
     </>
