@@ -20,7 +20,7 @@ function App() {
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
 
   return (
-    <ConnectionProvider endpoint={'https://few-soft-seed.solana-devnet.quiknode.pro/f13be9ddc489cb4c8b71bf78b63f1129532e0281'}>
+    <ConnectionProvider endpoint={'https://api.devnet.solana.com'}>
       <WalletProvider wallets={[]} autoConnect>
         <WalletModalProvider>
           <WalletMultiButton />
