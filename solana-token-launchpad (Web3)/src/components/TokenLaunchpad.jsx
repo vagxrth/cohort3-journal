@@ -19,14 +19,16 @@ export function TokenLaunchpad() {
                 lamports,
                 programId: TOKEN_PROGRAM_ID,
             }),
+
             createInitializeMint2Instruction(mintKeypair.publicKey, 9, wallet.publicKey, wallet.publicKey, TOKEN_PROGRAM_ID)
         );
 
         transaction.feePayer = wallet.publicKey;
-        transaction.recentBlockhash = (await connection.getRecentBlockhash()).blockhash;
+        transaction.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
         transaction.partialSign(mintKeypair);
 
-        await wallet.sendTransaction(transaction, connection);
+        const transactionSignature = await wallet.sendTransaction(transaction, connection);
+        console.log(`Transaction Signature: ${transactionSignature}`);
         
     }
 

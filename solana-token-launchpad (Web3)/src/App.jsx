@@ -22,10 +22,10 @@ function App() {
                 <WalletMultiButton />
                 <WalletDisconnectButton />
           </div>
+          <TokenLaunchpad />
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
-    <TokenLaunchpad />
     </div>
   )
 }
