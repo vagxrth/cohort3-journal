@@ -1,7 +1,7 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import { z } from "zod";
-import { adminModel } from "../db.js";
+import { AdminModel } from "../db.js";
 
 const adminRouter = express.Router();
 
@@ -29,7 +29,7 @@ adminRouter.post('/signup', async(req, res) => {
     try {
         const hashedPassword = bcrypt.hash(password, 5);
 
-        await adminModel.create({
+        await AdminModel.create({
             name: name,
             email: email,
             password: hashedPassword
