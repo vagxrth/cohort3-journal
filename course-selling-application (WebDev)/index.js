@@ -11,6 +11,8 @@ await mongoose.connect(process.env.CONNECTION_STRING);
 
 const app = express();
 
+app.use(express.json())
+
 app.use('/user', userRouter);
 
 app.use('/course', courseRouter);
