@@ -5,7 +5,7 @@ import { adminModel } from "../db.js";
 
 const adminRouter = express.Router();
 
-adminRouter.post('/signup', (req, res) => {
+adminRouter.post('/signup', async(req, res) => {
     
     const inputSchema = z.object({
         name: z.string().max(30),
@@ -27,9 +27,21 @@ adminRouter.post('/signup', (req, res) => {
     const password = req.body.password;
 
     try {
-        
+        const hashedPassword = bcrypt.hash(password, 5);
+
+        await adminModel.create({
+            name: name,
+            email: email,
+            password: hashedPassword
+        });
+
+        res.json({
+            message: "You are signed up!"
+        })
     } catch (error) {
-        
+        res.status(400).json({
+            message: "Email already exists"
+        })
     }
     
 });
