@@ -9,7 +9,7 @@ adminRouter.post('/signup', async(req, res) => {
     
     const inputSchema = z.object({
         name: z.string().max(30),
-        email: z.email(),
+        email: z.string().email(),
         password: z.string().max(50)
     })
 
@@ -30,8 +30,8 @@ adminRouter.post('/signup', async(req, res) => {
         const hashedPassword = bcrypt.hash(password, 5);
 
         await AdminModel.create({
-            name: name,
-            email: email,
+            name,
+            email,
             password: hashedPassword
         });
 

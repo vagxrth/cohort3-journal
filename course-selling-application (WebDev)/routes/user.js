@@ -9,7 +9,7 @@ userRouter.post("/signup", async(req, res) => {
     
     const requiredSchema = z.object({
         name: z.string().max(30),
-        email: z.email(),
+        email: z.string().email(),
         password: z.string().max(50)
     });
 
@@ -30,8 +30,8 @@ userRouter.post("/signup", async(req, res) => {
         const hashedPassword = bcrypt.hash(password, 5);
         
         await UserModel.create({
-            name: name,
-            email: email,
+            name,
+            email,
             password: hashedPassword
         });
 
