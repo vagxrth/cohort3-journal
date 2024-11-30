@@ -1,10 +1,37 @@
 import express from "express";
+import bcrypt from "bcrypt";
+import { z } from "zod";
 import { adminModel } from "../db.js";
 
 const adminRouter = express.Router();
 
 adminRouter.post('/signup', (req, res) => {
+    
+    const inputSchema = z.object({
+        name: z.string().max(30),
+        email: z.email(),
+        password: z.string()
+    })
 
+    const parseInput = inputSchema.safeParse(req.body);
+
+    if (!parseInput.success) {
+        return res.status(400).json({
+            message: "Incorrect Format",
+            error: parseInput.error
+        })
+    }
+
+    const name = req.body.name;
+    const email = req.body.email;
+    const password = req.body.password;
+
+    try {
+        
+    } catch (error) {
+        
+    }
+    
 });
 
 adminRouter.post('/signin', (req, res) => {
