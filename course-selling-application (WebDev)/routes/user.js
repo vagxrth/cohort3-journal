@@ -27,7 +27,7 @@ userRouter.post("/signup", async(req, res) => {
     const password = req.body.password;
 
     try {
-        const hashedPassword = bcrypt.hash(password, 5);
+        const hashedPassword = await bcrypt.hash(password, 5);
         
         await UserModel.create({
             name,
@@ -40,7 +40,7 @@ userRouter.post("/signup", async(req, res) => {
         })
     } catch (error) {
         res.status(400).json({
-            message: "Email already exists!"
+            message: "Error Occurred!"
         })
     }
 
