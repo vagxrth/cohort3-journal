@@ -1,9 +1,4 @@
 import mongoose  from "mongoose";
-import dotenv from "dotenv";
-
-dotenv.config()
-
-mongoose.connect(process.env.CONNECTION_STRING);
 
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
@@ -11,9 +6,17 @@ const ObjectId = Schema.ObjectId;
 const userSchema = new Schema({
     _id: ObjectId,
     name: String,
-    email: String,
+    email: { type: String, unique: true},
     password: String
 
 })
 
-const UserModel = mongoose.model('User', userSchema);
+const adminSchema = new Schema({
+    _id: ObjectId,
+    name: String,
+    email: { type: String, unique: true},
+    password: String
+})
+
+export const UserModel = mongoose.model('user', userSchema);
+export const AdminModel = mongoose.model('admin', adminSchema);
