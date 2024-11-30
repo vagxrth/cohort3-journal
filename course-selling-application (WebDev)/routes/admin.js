@@ -10,7 +10,7 @@ adminRouter.post('/signup', (req, res) => {
     const inputSchema = z.object({
         name: z.string().max(30),
         email: z.email(),
-        password: z.string()
+        password: z.string().max(50)
     })
 
     const parseInput = inputSchema.safeParse(req.body);
