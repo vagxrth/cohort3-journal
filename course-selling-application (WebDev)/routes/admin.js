@@ -10,15 +10,19 @@ adminRouter.post('/signin', (req, res) => {
 
 })
 
+adminRouter.get('/list', (req, res) => {
+    
+})
+
 adminRouter.post('/create', (req, res) => {
     res.send("ohayogozaimasu")
 })
 
-adminRouter.post('/add', (req, res) => {
+adminRouter.put('/add', (req, res) => {
     
 })
 
-adminRouter.post('/delete', (req, res) => {
+adminRouter.delete('/delete', (req, res) => {
 
 })
 
