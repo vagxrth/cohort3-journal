@@ -66,8 +66,16 @@ userRouter.post("/signin", async(req, res) => {
 
     const validUser = await bcrypt.compare(password, user.password);
 
-    if (!validUser) {
-        return res.status(400).json({
+    if (validUser) {
+        const token = jwt.sign({
+            id: user._id
+        }, process.env.USER_JWT_SECRET);
+
+        res.json({
+            token
+        })
+    } else {
+        res.status(403).json({
             message: "Incorrect Credentials"
         })
     }
