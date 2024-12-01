@@ -53,9 +53,9 @@ adminRouter.post('/signup', async(req, res) => {
 //signin
 adminRouter.post('/signin', async(req, res) => {
     const email = req.body.email;
-    const password = req.body.email;
+    const password = req.body.password;
 
-    const admin = await AdminModel.find({
+    const admin = await AdminModel.findOne({
         email: email
     })
 

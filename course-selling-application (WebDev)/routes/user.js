@@ -2,6 +2,7 @@ import express from "express";
 import { z } from "zod"; 
 import bcrypt from "bcrypt";
 import { UserModel } from "../db.js";
+import jwt from "jsonwebtoken";
 
 const userRouter = express.Router();
 
@@ -54,7 +55,7 @@ userRouter.post("/signin", async(req, res) => {
     const email = req.body.email;
     const password = req.body.password;
 
-    const user = await UserModel.find({
+    const user = await UserModel.findOne({
         email: email
     })
 
