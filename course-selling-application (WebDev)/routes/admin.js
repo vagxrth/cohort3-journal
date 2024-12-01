@@ -6,6 +6,8 @@ import jwt from "jsonwebtoken"
 
 const adminRouter = express.Router();
 
+
+//signup
 adminRouter.post('/signup', async(req, res) => {
     
     const inputSchema = z.object({
@@ -47,6 +49,8 @@ adminRouter.post('/signup', async(req, res) => {
     
 });
 
+
+//signin
 adminRouter.post('/signin', async(req, res) => {
     const email = req.body.email;
     const password = req.body.email;
@@ -57,7 +61,7 @@ adminRouter.post('/signin', async(req, res) => {
 
     if (!admin) {
         return res.status(400).json({
-            message: "The User doesn't exist!"
+            message: "The Admin doesn't exist!"
         })
     }
 })

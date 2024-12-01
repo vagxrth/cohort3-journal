@@ -5,6 +5,8 @@ import { UserModel } from "../db.js";
 
 const userRouter = express.Router();
 
+
+//signup
 userRouter.post("/signup", async(req, res) => {
     
     const requiredSchema = z.object({
@@ -46,8 +48,21 @@ userRouter.post("/signup", async(req, res) => {
 
 })
 
-userRouter.post("/signin", (req, res) => {
 
+//signin
+userRouter.post("/signin", async(req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    const user = await UserModel.find({
+        email: email
+    })
+
+    if (!user) {
+        return res.status(400).json({
+            message: "The User doesn't exist!"
+        })
+    }
 })
 
 userRouter.get("/courses", (req, res) => {
