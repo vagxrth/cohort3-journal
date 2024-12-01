@@ -64,6 +64,14 @@ adminRouter.post('/signin', async(req, res) => {
             message: "The Admin doesn't exist!"
         })
     }
+
+    const validUser = bcrypt.compare(password, admin.password);
+
+    if (!validUser) {
+        return res.status(400).json({
+            message: "Incorrect Credentials"
+        })
+    }
 })
 
 adminRouter.get('/list', (req, res) => {
