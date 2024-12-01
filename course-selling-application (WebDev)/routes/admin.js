@@ -1,7 +1,8 @@
-import express from "express";
+import express, { response } from "express";
 import bcrypt from "bcrypt";
 import { z } from "zod";
 import { AdminModel } from "../db.js";
+import jwt from "jsonwebtoken"
 
 const adminRouter = express.Router();
 
@@ -46,8 +47,19 @@ adminRouter.post('/signup', async(req, res) => {
     
 });
 
-adminRouter.post('/signin', (req, res) => {
+adminRouter.post('/signin', async(req, res) => {
+    const email = req.body.email;
+    const password = req.body.email;
 
+    const admin = await AdminModel.find({
+        email: email
+    })
+
+    if (!admin) {
+        return res.status(400).json({
+            message: "The User doesn't exist!"
+        })
+    }
 })
 
 adminRouter.get('/list', (req, res) => {
