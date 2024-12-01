@@ -1,8 +1,9 @@
 import express, { response } from "express";
 import bcrypt from "bcrypt";
 import { z } from "zod";
-import { AdminModel } from "../db.js";
-import jwt from "jsonwebtoken"
+import { AdminModel, CourseModel } from "../db.js";
+import jwt from "jsonwebtoken";
+import adminAuth from "../middlewares/admin.js"
 
 const adminRouter = express.Router();
 
@@ -85,8 +86,32 @@ adminRouter.get('/list', (req, res) => {
     
 })
 
-adminRouter.post('/create', (req, res) => {
-    res.send("ohayogozaimasu")
+
+//create a course
+adminRouter.post('/create', adminAuth, async(req, res) => {
+    const adminId = req.adminId;
+    const title = req.body.title;
+    const description = req.body.description;
+    const price = req.body.price;
+    const imageURL = req.body.imageURL;
+
+    const createCourse = await CourseModel.create({
+        title,
+        description,
+        price,
+        imageURL,
+        creator: adminId
+    });
+
+    if (createCourse) {
+        res.json({
+            message: "A New Course has been added!"
+        })
+    } else {
+        res.status(400).json({
+            message: 'Error creating the course'
+        })
+    }
 })
 
 adminRouter.put('/add', (req, res) => {
