@@ -63,6 +63,14 @@ userRouter.post("/signin", async(req, res) => {
             message: "The User doesn't exist!"
         })
     }
+
+    const validUser = await bcrypt.compare(password, user.password);
+
+    if (!validUser) {
+        return res.status(400).json({
+            message: "Incorrect Credentials"
+        })
+    }
 })
 
 userRouter.get("/courses", (req, res) => {

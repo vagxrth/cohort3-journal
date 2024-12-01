@@ -65,9 +65,9 @@ adminRouter.post('/signin', async(req, res) => {
         })
     }
 
-    const validUser = bcrypt.compare(password, admin.password);
+    const validAdmin = await bcrypt.compare(password, admin.password);
 
-    if (!validUser) {
+    if (!validAdmin) {
         return res.status(400).json({
             message: "Incorrect Credentials"
         })
