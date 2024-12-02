@@ -9,8 +9,8 @@ const adminRouter = express.Router();
 
 
 //signup
-adminRouter.post('/signup', async(req, res) => {
-    
+adminRouter.post('/signup', async (req, res) => {
+
     const inputSchema = z.object({
         name: z.string().max(30),
         email: z.string().email(),
@@ -47,12 +47,12 @@ adminRouter.post('/signup', async(req, res) => {
             message: "Error Occurred!"
         })
     }
-    
+
 });
 
 
 //signin
-adminRouter.post('/signin', async(req, res) => {
+adminRouter.post('/signin', async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
 
@@ -83,12 +83,12 @@ adminRouter.post('/signin', async(req, res) => {
 })
 
 adminRouter.get('/list', (req, res) => {
-    
+
 })
 
 
 //create a course
-adminRouter.post('/create', adminAuth, async(req, res) => {
+adminRouter.post('/create', adminAuth, async (req, res) => {
     const adminId = req.adminId;
     const title = req.body.title;
     const description = req.body.description;
@@ -114,12 +114,59 @@ adminRouter.post('/create', adminAuth, async(req, res) => {
     }
 })
 
-adminRouter.put('/add', (req, res) => {
-    
+
+// update course details
+adminRouter.put('/update', adminAuth, async (req, res) => {
+    const adminId = req.adminId;
+    const courseId = req.body.courseId;
+
+    const title = req.body.title;
+    const description = req.body.description;
+    const price = req.body.price;
+    const imageURL = req.body.imageURL;
+
+    const updateCourse = await CourseModel.updateOne({
+        _id: courseId,
+        creator: adminId
+    }, {
+        $set: {
+            title,
+            description,
+            price,
+            imageURL
+        }
+    });
+
+    if (updateCourse) {
+        res.json({
+            message: "The course has been updated"
+        })
+    } else {
+        res.status(400).json({
+            message: "Error updating the course"
+        })
+    }
+
 })
 
-adminRouter.delete('/delete', (req, res) => {
+adminRouter.delete('/delete', async(req, res) => {
+    const adminId = req.adminId;
+    const courseId = req.body.courseId;
 
+    const deleteCourse = await CourseModel.deleteOne({
+        _id: courseId,
+        creator: adminId
+    });
+
+    if (deleteCourse) {
+        res.json({
+            message: 'The course has been deleted'
+        })
+    } else {
+        res.json({
+            message: 'Error deleting the course'
+        })
+    }
 })
 
 export default adminRouter;
