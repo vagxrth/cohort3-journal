@@ -4,8 +4,18 @@ import { PurchaseModel } from '../db.js';
 
 const courseRouter = express.Router();
 
-courseRouter.get("/catalog", (req, res) => {
-    res.send("hajimemashte")
+courseRouter.get("/catalog", async(req, res) => {
+    const allCourses = await PurchaseModel.find({});
+
+    if (allCourses) {
+        res.json({
+            allCourses
+        })
+    } else {
+        res.status(400).json({
+            message: "Error fetching the courses"
+        })
+    }
 })
 
 courseRouter.post("/buy", userAuth, async(req, res) => {
@@ -24,7 +34,7 @@ courseRouter.post("/buy", userAuth, async(req, res) => {
         })
     } else {
         res.status(400).json({
-            message: 'Error purchasing the course!s'
+            message: 'Error purchasing the courses'
         })
     }
 })
