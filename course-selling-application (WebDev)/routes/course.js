@@ -1,11 +1,11 @@
 import express from 'express';
 import userAuth from '../middlewares/user.js';
-import { PurchaseModel } from '../db.js';
+import { CourseModel } from '../db.js';
 
 const courseRouter = express.Router();
 
 courseRouter.get("/catalog", async(req, res) => {
-    const allCourses = await PurchaseModel.find({});
+    const allCourses = await CourseModel.find({});
 
     if (allCourses) {
         res.json({
