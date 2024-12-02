@@ -1,7 +1,7 @@
 import express from "express";
 import { z } from "zod"; 
 import bcrypt from "bcrypt";
-import { PurchaseModel, UserModel } from "../db.js";
+import { CourseModel, PurchaseModel, UserModel } from "../db.js";
 import jwt from "jsonwebtoken";
 import userAuth from "../middlewares/user.js"
 
@@ -91,9 +91,13 @@ userRouter.get("/courses", userAuth, async(req, res) => {
     })
 
     if (courses) {
+        const courseData = await CourseModel.find({
+            _id: { $in: courses.map(x => x.course) }
+        });
         res.json({
             message: "Fetched all your courses!",
-            courses
+            courses,
+            courseData
         })
     } else {
         res.status(400).json({
