@@ -82,8 +82,22 @@ adminRouter.post('/signin', async (req, res) => {
     }
 })
 
-adminRouter.get('/list', (req, res) => {
+adminRouter.get('/list', async(req, res) => {
+    const adminId = req.adminId;
 
+    const courses = await CourseModel.find({
+        creator: adminId
+    })
+
+    if (courses) {
+        res.json({
+            courses
+        })
+    } else {
+        res.status(400).json({
+            message: "Error fetching the courses"
+        })
+    }
 })
 
 
@@ -105,7 +119,8 @@ adminRouter.post('/create', adminAuth, async (req, res) => {
 
     if (createCourse) {
         res.json({
-            message: "A New Course has been added!"
+            message: "A New Course has been added!",
+            createCourse
         })
     } else {
         res.status(400).json({
@@ -139,7 +154,8 @@ adminRouter.put('/update', adminAuth, async (req, res) => {
 
     if (updateCourse) {
         res.json({
-            message: "The course has been updated"
+            message: "The course has been updated",
+            updateCourse
         })
     } else {
         res.status(400).json({
