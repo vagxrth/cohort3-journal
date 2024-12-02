@@ -1,7 +1,7 @@
 import express from "express";
 import { z } from "zod"; 
 import bcrypt from "bcrypt";
-import { UserModel } from "../db.js";
+import { PurchaseModel, UserModel } from "../db.js";
 import jwt from "jsonwebtoken";
 import userAuth from "../middlewares/user.js"
 
@@ -83,8 +83,23 @@ userRouter.post("/signin", async(req, res) => {
     }
 })
 
-userRouter.get("/courses", userAuth, (req, res) => {
-    
+userRouter.get("/courses", userAuth, async(req, res) => {
+    const userId = req.userId;
+
+    const courses = await PurchaseModel.find({
+        user: userId,
+    })
+
+    if (courses) {
+        res.json({
+            message: "Fetched all your courses!",
+            courses
+        })
+    } else {
+        res.status(400).json({
+            message: "Error fetching all your courses!"
+        })
+    }
 })
 
 export default userRouter;
