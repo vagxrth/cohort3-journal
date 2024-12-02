@@ -82,7 +82,7 @@ adminRouter.post('/signin', async (req, res) => {
     }
 })
 
-adminRouter.get('/list', async(req, res) => {
+adminRouter.get('/list', adminAuth, async(req, res) => {
     const adminId = req.adminId;
 
     const courses = await CourseModel.find({
