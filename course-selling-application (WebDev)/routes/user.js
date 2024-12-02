@@ -3,6 +3,7 @@ import { z } from "zod";
 import bcrypt from "bcrypt";
 import { UserModel } from "../db.js";
 import jwt from "jsonwebtoken";
+import userAuth from "../middlewares/user.js"
 
 const userRouter = express.Router();
 
@@ -82,8 +83,8 @@ userRouter.post("/signin", async(req, res) => {
     }
 })
 
-userRouter.get("/courses", (req, res) => {
-
+userRouter.get("/courses", userAuth, (req, res) => {
+    
 })
 
 export default userRouter;
