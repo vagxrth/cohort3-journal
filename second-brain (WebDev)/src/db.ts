@@ -1,7 +1,13 @@
 import mongoose from "mongoose";
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 async function connectDB() {
-    await mongoose.connect('mongodb+srv://vagarth:vagarthdb@cluster0.9jrxzdm.mongodb.net/');
+    if (!process.env.CONNECTION_STRING) {
+        throw new Error('CONNECTION_STRING environment variable is not defined');
+    }
+    await mongoose.connect(process.env.CONNECTION_STRING);
 }
 connectDB().catch(err => console.error('Failed to connect to MongoDB:', err));
 
