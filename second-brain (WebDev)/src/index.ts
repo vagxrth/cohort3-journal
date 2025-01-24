@@ -2,6 +2,10 @@ import express from 'express'
 import { UserModel } from './db';
 import bcrypt from 'bcrypt'
 import { z } from 'zod'
+import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const app = express();
 
@@ -21,6 +25,7 @@ app.post('/signup', async(req, res) => {
             message: "Invalid Inputs",
             error: parsed.error
         })
+        return
     }
 
     const username = req.body.username;
@@ -44,7 +49,39 @@ app.post('/signup', async(req, res) => {
     }
 })
 
-app.post('/signin', (req, res) => {
+app.post('/signin', async(req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    const user = await UserModel.findOne({
+        username
+    })
+
+    if (!user || !user.password) {
+        res.status(400).json({
+            message: 'User not found!'
+        })
+        return;
+    }
+    // @ts-ignore
+    const validUser = await bcrypt.compare(password, user.password)
+
+    if (validUser) {
+        if (!process.env.JWT_SECRET) {
+            throw new Error('JWT_SECRET is not defined');
+        }
+        const token = jwt.sign({
+            // @ts-ignore
+            id: user._id
+        }, process.env.JWT_SECRET)
+        res.json({
+            token
+        })
+    } else {
+        res.status(411).json({
+            message: 'Invalid Credentials!'
+        })
+    }
 
 })
 
