@@ -108,8 +108,24 @@ app.post('/add-content', auth, async(req, res) => {
     }
 })
 
-app.get('/your-content', (req, res) => {
+app.get('/your-content', auth, async(req, res) => {
 
+    // @ts-ignore
+    const userId = req.userId
+
+    const content = await ContentModel.find({
+        userId
+    }).populate('userId', 'username')
+
+    if (content) {
+        res.status(200).json({
+            content
+        })
+    } else {
+        res.json(400).json({
+            message: 'No Content Found!'
+        })
+    }
 })
 
 app.delete('/delete-content', (req, res) => {
