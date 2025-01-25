@@ -3,9 +3,7 @@ import { UserModel } from './db';
 import bcrypt from 'bcrypt'
 import { z } from 'zod'
 import jwt from 'jsonwebtoken'
-import dotenv from 'dotenv'
-
-dotenv.config()
+import auth from './middleware';
 
 const app = express();
 
@@ -86,7 +84,7 @@ app.post('/signin', async(req, res) => {
 })
 
 app.post('/add-content', (req, res) => {
-
+    
 })
 
 app.get('/your-content', (req, res) => {
