@@ -128,8 +128,23 @@ app.get('/your-content', auth, async(req, res) => {
     }
 })
 
-app.delete('/delete-content', (req, res) => {
+app.delete('/delete-content', auth, async(req, res) => {
+    const title = req.body.title;
 
+    try{
+        await ContentModel.deleteOne({
+            title,
+            // @ts-ignore
+            userId: req.userId
+        })
+        res.status(200).json({
+            message: 'Content deleted successfully!'
+        })
+    } catch(error) {
+        res.status(403).json({
+            message: 'Error deleting content!'
+        })
+    }
 })
 
 app.post('/share', (req, res) => {
