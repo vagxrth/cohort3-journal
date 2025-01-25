@@ -1,5 +1,5 @@
 import express from 'express'
-import { UserModel } from './db';
+import { ContentModel, UserModel } from './db';
 import bcrypt from 'bcrypt'
 import { z } from 'zod'
 import jwt from 'jsonwebtoken'
@@ -83,8 +83,29 @@ app.post('/signin', async(req, res) => {
 
 })
 
-app.post('/add-content', (req, res) => {
-    
+app.post('/add-content', auth, async(req, res) => {
+    const link = req.body.link;
+    const type = req.body.type;
+    const title = req.body.title;
+    // @ts-ignore
+    const userId = req.userId;
+
+    try{
+        await ContentModel.create({
+            link,
+            type,
+            title,
+            userId
+            
+        })
+        res.status(200).json({
+            message: 'Content added Successfully!'
+        })
+    } catch(error) {
+        res.status(400).json({
+            message: 'Error adding content!'
+        })
+    }
 })
 
 app.get('/your-content', (req, res) => {
