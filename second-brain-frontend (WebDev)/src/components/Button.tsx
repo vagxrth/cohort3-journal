@@ -14,14 +14,14 @@ const variantStyles = {
 }
 
 const sizeStyles = {
-  "sm": "w-30 h-10",
-  "md": "w-50 h-20",
-  "lg": "w-70 h-30"
+  "sm": "px-2 py-1 text-sm",
+  "md": "px-4 py-2 text-md",
+  "lg": "px-8 py-3 text-lg"
 }
 
 const Button = (props: ButtonProps) => {
   return (
-    <button onClick={props.onClick} className={`${variantStyles[props.variant]} ${sizeStyles[props.size]} rounded-[10px] flex`}>
+    <button onClick={props.onClick} className={`${variantStyles[props.variant]} ${sizeStyles[props.size]} rounded-[10px] flex cursor-pointer`}>
       {props.icon}
       {props.text}
     </button>
