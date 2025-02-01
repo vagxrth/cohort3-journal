@@ -10,7 +10,15 @@ const app = express();
 
 app.use(express.json())
 
-app.post('/signup', async(req, res) => {
+declare global {
+    namespace Express {
+      export interface Request {
+        userId: string
+      }
+    }
+  }
+
+app.post('/signup', async (req, res) => {
 
     const user = z.object({
         username: z.string(),
@@ -41,14 +49,14 @@ app.post('/signup', async(req, res) => {
         res.json({
             message: 'User created successfully!'
         })
-    } catch(error) {
+    } catch (error) {
         res.status(403).json({
             message: 'Error creating User, User already Exists!'
         })
     }
 })
 
-app.post('/signin', async(req, res) => {
+app.post('/signin', async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 
@@ -62,7 +70,7 @@ app.post('/signin', async(req, res) => {
         })
         return;
     }
-    // @ts-ignore
+
     const validUser = await bcrypt.compare(password, user.password)
 
     if (validUser) {
@@ -70,7 +78,6 @@ app.post('/signin', async(req, res) => {
             throw new Error('JWT_SECRET is not defined');
         }
         const token = jwt.sign({
-            // @ts-ignore
             id: user._id
         }, process.env.JWT_SECRET)
         res.json({
@@ -84,34 +91,32 @@ app.post('/signin', async(req, res) => {
 
 })
 
-app.post('/add-content', auth, async(req, res) => {
+app.post('/add-content', auth, async (req, res) => {
     const link = req.body.link;
     const type = req.body.type;
     const title = req.body.title;
-    // @ts-ignore
     const userId = req.userId;
 
-    try{
+    try {
         await ContentModel.create({
             link,
             type,
             title,
             userId
-            
+
         })
         res.status(200).json({
             message: 'Content added Successfully!'
         })
-    } catch(error) {
+    } catch (error) {
         res.status(400).json({
             message: 'Error adding content!'
         })
     }
 })
 
-app.get('/your-content', auth, async(req, res) => {
+app.get('/your-content', auth, async (req, res) => {
 
-    // @ts-ignore
     const userId = req.userId
 
     const content = await ContentModel.find({
@@ -123,51 +128,50 @@ app.get('/your-content', auth, async(req, res) => {
             content
         })
     } else {
-        res.json(400).json({
+        res.status(400).json({
             message: 'No Content Found!'
         })
     }
 })
 
-app.delete('/delete-content', auth, async(req, res) => {
+app.delete('/delete-content', auth, async (req, res) => {
     const title = req.body.title;
 
-    try{
+    try {
         await ContentModel.deleteOne({
             title,
-            // @ts-ignore
             userId: req.userId
         })
         res.status(200).json({
             message: 'Content deleted successfully!'
         })
-    } catch(error) {
+    } catch (error) {
         res.status(403).json({
             message: 'Error deleting content!'
         })
     }
 })
 
-app.post('/share', auth, async(req, res) => {
+app.post('/share', auth, async (req, res) => {
     const share = req.body.share;
     if (share) {
         try {
+            const hash = random(10)
             await LinkModel.create({
-                hash: random(10),
-                // @ts-ignore
+                hash: hash,
                 userId: req.userId
             })
             res.status(200).json({
-                message: 'Shareable Link Generate Successfully!'
+                message: 'Shareable Link Generate Successfully!',
+                share: '/share/' + hash
             })
-        }catch(error) {
+        } catch (error) {
             res.status(403).json({
                 message: "Error generating the Shareable Link!"
             })
         }
     } else {
         await LinkModel.deleteOne({
-            // @ts-ignore
             userId: req.userId
         })
 
@@ -177,8 +181,32 @@ app.post('/share', auth, async(req, res) => {
     }
 })
 
-app.get('/share/:userId', (req, res) => {
-    
-})
+// app.get('/share/:hash', async(req, res) => {
+//     const hash = req.params.hash;
+
+//     const link = await LinkModel.findOne({ 
+//         hash 
+//     });
+
+//     if (!link) {
+//         return res.status(404).json({
+//             message: 'Link not Found!'
+//         });
+//     }
+
+//     const content = await ContentModel.findOne({
+//         userId: link.userId
+//     });
+
+//     const user = await UserModel.findOne({
+//         _id: link.userId
+//     });
+
+//     return res.status(200).json({
+//         message: 'Link Found!',
+//         user: user?.username,
+//         content
+//     });
+// });
 
 app.listen(3000);
