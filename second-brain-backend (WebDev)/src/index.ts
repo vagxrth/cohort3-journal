@@ -163,7 +163,7 @@ app.post('/share', auth, async (req, res) => {
             })
             res.status(200).json({
                 message: 'Shareable Link Generate Successfully!',
-                share: '/share/' + hash
+                share: '/' + hash
             })
         } catch (error) {
             res.status(403).json({
@@ -181,32 +181,37 @@ app.post('/share', auth, async (req, res) => {
     }
 })
 
-// app.get('/share/:hash', async(req, res) => {
-//     const hash = req.params.hash;
+app.get('/share/:hash', async(req, res) => {
+    const hash = req.params.hash;
 
-//     const link = await LinkModel.findOne({ 
-//         hash 
-//     });
+    try {
+        const link = await LinkModel.findOne({
+            hash
+        });
 
-//     if (!link) {
-//         return res.status(404).json({
-//             message: 'Link not Found!'
-//         });
-//     }
-
-//     const content = await ContentModel.findOne({
-//         userId: link.userId
-//     });
-
-//     const user = await UserModel.findOne({
-//         _id: link.userId
-//     });
-
-//     return res.status(200).json({
-//         message: 'Link Found!',
-//         user: user?.username,
-//         content
-//     });
-// });
+        if (!link) {
+            res.status(404).json({
+                message: "Invalid share link!"
+            });
+        } else {
+            const content = await ContentModel.findOne({
+                userId: link?.userId
+            })
+    
+            const user = await UserModel.findOne({
+                _id: link?.userId
+            })
+    
+            res.status(200).json({
+                user: user?.username,
+                content
+            })
+        }
+    } catch (error) {
+        res.status(404).json({
+            message: "Error getting the Shared Content!"
+        })
+    }
+});
 
 app.listen(3000);
