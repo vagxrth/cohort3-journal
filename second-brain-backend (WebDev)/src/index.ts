@@ -1,9 +1,10 @@
 import express from 'express'
-import { ContentModel, UserModel } from './db';
+import { ContentModel, LinkModel, UserModel } from './db';
 import bcrypt from 'bcrypt'
 import { z } from 'zod'
 import jwt from 'jsonwebtoken'
 import auth from './middleware';
+import random from './utils';
 
 const app = express();
 
@@ -147,8 +148,33 @@ app.delete('/delete-content', auth, async(req, res) => {
     }
 })
 
-app.post('/share', (req, res) => {
+app.post('/share', auth, async(req, res) => {
+    const share = req.body.share;
+    if (share) {
+        try {
+            await LinkModel.create({
+                hash: random(10),
+                // @ts-ignore
+                userId: req.userId
+            })
+            res.status(200).json({
+                message: 'Shareable Link Generate Successfully!'
+            })
+        }catch(error) {
+            res.status(403).json({
+                message: "Error generating the Shareable Link!"
+            })
+        }
+    } else {
+        await LinkModel.deleteOne({
+            // @ts-ignore
+            userId: req.userId
+        })
 
+        res.status(200).json({
+            message: 'Shareable Link Disabled!'
+        })
+    }
 })
 
 app.get('/share/:userId', (req, res) => {
