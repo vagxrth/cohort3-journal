@@ -1,13 +1,16 @@
-import Button from './components/Button'
-import Plus from '../src/components/icons/Plus'
-import Share from './components/icons/Share'
+import { PlusCircle, Share2 } from 'lucide-react'
+import { Button } from './components/Button'
 
 function App() {
 
   return (
     <div className='flex'>
-      <Button variant='primary' size='sm' text='Add Content' onClick={() => {}} icon={<Plus size='md' />}/>
-      <Button variant='secondary' size='sm' text='Share' onClick={() => {}} icon={<Share size='md'/>}/>
+      <Button variant="secondary" icon={Share2}>
+        Share Brain
+      </Button>
+      <Button variant="primary" icon={PlusCircle}>
+        Add Content
+      </Button>
     </div>
   )
 }

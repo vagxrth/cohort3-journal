@@ -1,31 +1,27 @@
-import { ReactElement } from "react";
+import React from 'react';
+import { DivideIcon as LucideIcon } from 'lucide-react';
 
 interface ButtonProps {
-  variant: 'primary' | 'secondary';
-  size: 'sm' | 'md' | 'lg';
-  text: string;
-  icon?: ReactElement;
-  onClick: () => void;
+  variant?: 'primary' | 'secondary';
+  children: React.ReactNode;
+  icon?: typeof LucideIcon;
+  onClick?: () => void;
 }
 
-const variantStyles = {
-  "primary": "bg-purple-600 text-black",
-  "secondary": "bg-blue-100 text-purple"
-}
+export function Button({ variant = 'primary', children, icon: Icon, onClick }: ButtonProps) {
+  const baseStyles = "flex items-center gap-2 px-4 py-2 rounded-lg";
+  const variants = {
+    primary: "text-white bg-indigo-600 hover:bg-indigo-700",
+    secondary: "text-indigo-600 bg-indigo-50 hover:bg-indigo-100"
+  };
 
-const sizeStyles = {
-  "sm": "px-2 py-1 text-sm",
-  "md": "px-4 py-2 text-md",
-  "lg": "px-8 py-3 text-lg"
-}
-
-const Button = (props: ButtonProps) => {
   return (
-    <button onClick={props.onClick} className={`${variantStyles[props.variant]} ${sizeStyles[props.size]} rounded-[10px] flex cursor-pointer`}>
-      {props.icon}
-      {props.text}
+    <button 
+      className={`${baseStyles} ${variants[variant]}`}
+      onClick={onClick}
+    >
+      {Icon && <Icon className="w-5 h-5" />}
+      {children}
     </button>
-  )
+  );
 }
-
-export default Button
