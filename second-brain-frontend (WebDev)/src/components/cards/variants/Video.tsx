@@ -1,17 +1,7 @@
 import { Video } from 'lucide-react';
 import { BaseCard } from '../BaseCard';
 import { Tags } from '../Tags';
-
-interface Note {
-    id: string;
-    type: 'document' | 'video' | 'tweet' | 'link';
-    title: string;
-    content?: string;
-    tags: string[];
-    date: string;
-    url?: string;
-    thumbnail?: string;
-}
+import { Note } from '../../../utils/note';
 
 interface VideoCardProps {
   note: Note;

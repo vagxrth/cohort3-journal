@@ -1,6 +1,7 @@
 import { FileText } from 'lucide-react';
 import { BaseCard } from '../BaseCard';
 import { Tags } from '../Tags';
+import { Note } from '../../../utils/note';
 
 interface DocumentCardProps {
   note: Note;
@@ -8,16 +9,6 @@ interface DocumentCardProps {
   onDelete?: () => void;
 }
 
-interface Note {
-  id: string;
-  type: 'document' | 'video' | 'tweet' | 'link';
-  title: string;
-  content?: string;
-  tags: string[];
-  date: string;
-  url?: string;
-  thumbnail?: string;
-}
 
 export function DocumentCard({ note, onShare, onDelete }: DocumentCardProps) {
   return (
