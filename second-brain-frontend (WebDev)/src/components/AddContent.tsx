@@ -1,7 +1,8 @@
+import React, { useState } from 'react';
 import { Modal } from './Modal';
 import { Button } from './Button';
-import { useState } from 'react';
 import { Note } from '../utils/note';
+import { getTweetId, getYouTubeVideoId } from '../utils/urlHelper';
 
 interface AddContentModalProps {
   isOpen: boolean;
@@ -9,29 +10,46 @@ interface AddContentModalProps {
   onSubmit: (note: Omit<Note, 'id' | 'date'>) => void;
 }
 
-export function AddContent({ isOpen, onClose, onSubmit }: AddContentModalProps) {
+export function AddContentModal({ isOpen, onClose, onSubmit }: AddContentModalProps) {
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
   const [type, setType] = useState<'video' | 'tweet'>('video');
+  const [error, setError] = useState('');
+
+  const validateUrl = (url: string, type: 'video' | 'tweet'): boolean => {
+    if (type === 'video') {
+      return !!getYouTubeVideoId(url);
+    } else {
+      return !!getTweetId(url);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!validateUrl(url, type)) {
+      setError(`Invalid ${type === 'video' ? 'YouTube' : 'Twitter'} URL`);
+      return;
+    }
+
     const newNote: Omit<Note, 'id' | 'date'> = {
       type,
       title,
       url,
-      tags: ['productivity'],
-      ...(type === 'video' && {
-        thumbnail: 'https://images.unsplash.com/photo-1589652717521-10c0d092dea9?auto=format&fit=crop&w=800&q=80'
-      })
+      tags: ['productivity']
     };
 
     onSubmit(newNote);
     setTitle('');
     setUrl('');
     setType('video');
+    setError('');
     onClose();
+  };
+
+  const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUrl(e.target.value);
+    setError('');
   };
 
   return (
@@ -89,10 +107,14 @@ export function AddContent({ isOpen, onClose, onSubmit }: AddContentModalProps) 
             type="url"
             id="url"
             value={url}
-            onChange={(e) => setUrl(e.target.value)}
+            onChange={handleUrlChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            placeholder={type === 'video' ? 'YouTube video URL' : 'Tweet URL'}
             required
           />
+          {error && (
+            <p className="mt-1 text-sm text-red-600">{error}</p>
+          )}
         </div>
 
         <div className="flex justify-end gap-3 mt-6">
