@@ -10,7 +10,7 @@ interface AddContentModalProps {
   onSubmit: (note: Omit<Note, 'id' | 'date'>) => void;
 }
 
-export function AddContentModal({ isOpen, onClose, onSubmit }: AddContentModalProps) {
+export function AddContent({ isOpen, onClose, onSubmit }: AddContentModalProps) {
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
   const [type, setType] = useState<'video' | 'tweet'>('video');

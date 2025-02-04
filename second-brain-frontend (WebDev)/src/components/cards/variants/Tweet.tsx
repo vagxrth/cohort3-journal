@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Twitter } from 'lucide-react';
 import { BaseCard } from '../BaseCard';
 import { Tags } from '../Tags';
@@ -13,11 +13,31 @@ interface TweetCardProps {
 
 export function TweetCard({ note, onShare, onDelete }: TweetCardProps) {
   const tweetId = note.url ? getTweetId(note.url) : null;
+  const tweetContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Load Twitter widget script
-    if (tweetId && window.twttr) {
-      window.twttr.widgets.load();
+    if (tweetId && tweetContainerRef.current) {
+      // Clean up previous tweet
+      tweetContainerRef.current.innerHTML = '';
+      
+      // Create new tweet
+      const loadTweet = async () => {
+        if (window.twttr) {
+          try {
+            await window.twttr.widgets.createTweet(
+              tweetId,
+              tweetContainerRef.current!,
+              {
+                conversation: 'none'
+              }
+            );
+          } catch (error) {
+            console.error('Error embedding tweet:', error);
+          }
+        }
+      };
+
+      loadTweet();
     }
   }, [tweetId]);
 
@@ -29,11 +49,7 @@ export function TweetCard({ note, onShare, onDelete }: TweetCardProps) {
       onDelete={onDelete}
     >
       {tweetId ? (
-        <div className="mb-4">
-          <blockquote className="twitter-tweet" data-conversation="none">
-            <a href={note.url}></a>
-          </blockquote>
-        </div>
+        <div ref={tweetContainerRef} className="mb-4" />
       ) : (
         <div className="mb-4 p-6 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400">
           <Twitter className="w-12 h-12" />
