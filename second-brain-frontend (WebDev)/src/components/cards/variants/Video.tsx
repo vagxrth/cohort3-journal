@@ -2,6 +2,8 @@ import { Video } from 'lucide-react';
 import { BaseCard } from '../BaseCard';
 import { Tags } from '../Tags';
 import { Note } from '../../../utils/note';
+import { getYouTubeVideoId } from '../../../utils/urlHelper';
+
 
 interface VideoCardProps {
   note: Note;
@@ -9,8 +11,9 @@ interface VideoCardProps {
   onDelete?: () => void;
 }
 
-
 export function VideoCard({ note, onShare, onDelete }: VideoCardProps) {
+  const videoId = note.url ? getYouTubeVideoId(note.url) : null;
+
   return (
     <BaseCard
       title={note.title}
@@ -18,13 +21,19 @@ export function VideoCard({ note, onShare, onDelete }: VideoCardProps) {
       onShare={onShare}
       onDelete={onDelete}
     >
-      {note.thumbnail && (
+      {videoId ? (
         <div className="mb-4 aspect-video bg-gray-100 rounded-lg overflow-hidden">
-          <img 
-            src={note.thumbnail} 
-            alt={note.title}
-            className="w-full h-full object-cover"
+          <iframe
+            src={`https://www.youtube.com/embed/${videoId}`}
+            title={note.title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="w-full h-full"
           />
+        </div>
+      ) : (
+        <div className="mb-4 aspect-video bg-gray-100 rounded-lg flex items-center justify-center text-gray-400">
+          <Video className="w-12 h-12" />
         </div>
       )}
       <Tags tags={note.tags} />
