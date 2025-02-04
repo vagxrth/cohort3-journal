@@ -1,0 +1,109 @@
+import { Modal } from './Modal';
+import { Button } from './Button';
+import { useState } from 'react';
+import { Note } from '../utils/note';
+
+interface AddContentModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSubmit: (note: Omit<Note, 'id' | 'date'>) => void;
+}
+
+export function AddContentModal({ isOpen, onClose, onSubmit }: AddContentModalProps) {
+  const [title, setTitle] = useState('');
+  const [url, setUrl] = useState('');
+  const [type, setType] = useState<'video' | 'tweet'>('video');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const newNote: Omit<Note, 'id' | 'date'> = {
+      type,
+      title,
+      url,
+      tags: ['productivity'], // Default tag
+      ...(type === 'video' && {
+        thumbnail: 'https://images.unsplash.com/photo-1589652717521-10c0d092dea9?auto=format&fit=crop&w=800&q=80'
+      })
+    };
+
+    onSubmit(newNote);
+    setTitle('');
+    setUrl('');
+    setType('video');
+    onClose();
+  };
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} title="Add New Content">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-1">
+            Content Type
+          </label>
+          <div className="flex gap-4">
+            <label className="flex items-center">
+              <input
+                type="radio"
+                name="type"
+                value="video"
+                checked={type === 'video'}
+                onChange={(e) => setType(e.target.value as 'video')}
+                className="mr-2"
+              />
+              YouTube Video
+            </label>
+            <label className="flex items-center">
+              <input
+                type="radio"
+                name="type"
+                value="tweet"
+                checked={type === 'tweet'}
+                onChange={(e) => setType(e.target.value as 'tweet')}
+                className="mr-2"
+              />
+              Tweet
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+            Title
+          </label>
+          <input
+            type="text"
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-1">
+            URL
+          </label>
+          <input
+            type="url"
+            id="url"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            required
+          />
+        </div>
+
+        <div className="flex justify-end gap-3 mt-6">
+          <Button variant="secondary" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button variant="primary" type="submit">
+            Add Content
+          </Button>
+        </div>
+      </form>
+    </Modal>
+  );
+}

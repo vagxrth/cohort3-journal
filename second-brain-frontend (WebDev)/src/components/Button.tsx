@@ -6,6 +6,7 @@ interface ButtonProps {
   children: React.ReactNode;
   icon?: typeof LucideIcon;
   onClick?: () => void;
+  type?: 'button' | 'submit' | 'reset';
 }
 
 export function Button({ variant = 'primary', children, icon: Icon, onClick }: ButtonProps) {
