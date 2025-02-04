@@ -9,7 +9,7 @@ interface AddContentModalProps {
   onSubmit: (note: Omit<Note, 'id' | 'date'>) => void;
 }
 
-export function AddContentModal({ isOpen, onClose, onSubmit }: AddContentModalProps) {
+export function AddContent({ isOpen, onClose, onSubmit }: AddContentModalProps) {
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
   const [type, setType] = useState<'video' | 'tweet'>('video');
@@ -21,7 +21,7 @@ export function AddContentModal({ isOpen, onClose, onSubmit }: AddContentModalPr
       type,
       title,
       url,
-      tags: ['productivity'], // Default tag
+      tags: ['productivity'],
       ...(type === 'video' && {
         thumbnail: 'https://images.unsplash.com/photo-1589652717521-10c0d092dea9?auto=format&fit=crop&w=800&q=80'
       })

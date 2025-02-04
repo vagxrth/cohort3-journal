@@ -1,10 +1,13 @@
+import { useState } from 'react';
 import { Share2, PlusCircle } from 'lucide-react';
 import { Button } from './Button';
 import { Note } from '../utils/note';
 import { NoteCard } from './cards/NoteCard';
+import { AddContent } from './AddContent';
 
 export function ContentPage() {
-  const notes: Note[] = [
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [notes, setNotes] = useState<Note[]>([
     {
       id: '1',
       type: "document",
@@ -29,14 +32,23 @@ export function ContentPage() {
       tags: ["productivity", "learning"],
       date: "Added on 08/03/2024"
     }
-  ];
+  ]);
 
   const handleShare = (noteId: string) => {
     console.log('Share note:', noteId);
   };
 
   const handleDelete = (noteId: string) => {
-    console.log('Delete note:', noteId);
+    setNotes(notes.filter(note => note.id !== noteId));
+  };
+
+  const handleAddContent = (newNote: Omit<Note, 'id' | 'date'>) => {
+    const note: Note = {
+      ...newNote,
+      id: Math.random().toString(36).substr(2, 9),
+      date: `Added on ${new Date().toLocaleDateString('en-GB')}`
+    };
+    setNotes([note, ...notes]);
   };
 
   return (
@@ -49,7 +61,11 @@ export function ContentPage() {
             <Button variant="secondary" icon={Share2}>
               Share Brain
             </Button>
-            <Button variant="primary" icon={PlusCircle}>
+            <Button 
+              variant="primary" 
+              icon={PlusCircle}
+              onClick={() => setIsModalOpen(true)}
+            >
               Add Content
             </Button>
           </div>
@@ -66,6 +82,12 @@ export function ContentPage() {
             />
           ))}
         </div>
+
+        <AddContent
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSubmit={handleAddContent}
+        />
       </div>
     </main>
   );
