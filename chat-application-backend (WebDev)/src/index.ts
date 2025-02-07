@@ -31,8 +31,4 @@ ws.on('connection', (socket) => {
         }
         
     })
-
-    socket.on('disconnect', () => {
-        
-    })
 })
