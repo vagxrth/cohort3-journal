@@ -16,4 +16,8 @@ ws.on('connection', (socket) => {
         console.log('Received Data: %s', data)
         allSockets.forEach((s) => s.send(`Server Send This Message: ${data}`))
     })
+
+    socket.on('disconnect', () => {
+        allSockets.filter((s) => s != socket)
+    })
 })
